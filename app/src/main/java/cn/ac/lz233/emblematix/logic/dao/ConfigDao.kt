@@ -19,6 +19,10 @@ object ConfigDao {
         get() = App.sp.getBoolean("showModel", true)
         set(value) = App.editor.putBoolean("showModel", value).apply()
 
+    var showLens: Boolean
+        get() = App.sp.getBoolean("showLens", true)
+        set(value) = App.editor.putBoolean("showLens", value).apply()
+
     var showFNumber: Boolean
         get() = App.sp.getBoolean("showFNumber", true)
         set(value) = App.editor.putBoolean("showFNumber", value).apply()

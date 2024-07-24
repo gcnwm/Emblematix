@@ -2,6 +2,7 @@ package cn.ac.lz233.emblematix.ui.theme
 
 import android.graphics.Typeface
 import androidx.compose.material3.Typography
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -13,7 +14,8 @@ import cn.ac.lz233.emblematix.R
 
 val fonts = FontFamily(
     Font(R.font.googlesansregular, weight = FontWeight.Normal),
-    Font(R.font.googlesansmedium, weight = FontWeight.Medium)
+    Font(R.font.googlesansmedium, weight = FontWeight.Medium),
+    Font(R.font.emblematrix, weight = FontWeight.Medium)
 )
 
 // Set of Material typography styles to start with

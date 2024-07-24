@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.Paint
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -17,6 +18,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresExtension
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
@@ -81,6 +83,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var exif: ExifInterface
 
+    @RequiresExtension(extension = Build.VERSION_CODES.R, version = 2)
     @OptIn(
         ExperimentalMaterial3Api::class,
         ExperimentalGlideComposeApi::class
@@ -117,10 +120,17 @@ class MainActivity : ComponentActivity() {
                         if (bitmap.width != 1 && bitmap.height != 1) {
                             isProcessing = true
                             val drawText = if (ConfigDao.watermarkType == "normal") {
-                                listOf(
-                                    "${exif.getDevice()}  ${exif.getPhotoInfo()}".trim(),
-                                    "${ConfigDao.location}  ${exif.getCopyRight()}".trim()
-                                )
+                                if (ConfigDao.showLens) {
+                                    listOf(
+                                        exif.getDevice(),
+                                        "${exif.getPhotoInfo()}  ${ConfigDao.location}  ${exif.getCopyRight()}".trim()
+                                    )
+                                } else {
+                                    listOf(
+                                        "${exif.getDevice()}  ${exif.getPhotoInfo()}".trim(),
+                                        "${ConfigDao.location}  ${exif.getCopyRight()}".trim()
+                                    )
+                                }
                             } else {
                                 listOf(
                                     ConfigDao.location,
@@ -144,7 +154,7 @@ class MainActivity : ComponentActivity() {
                                         if (ConfigDao.watermarkType == "normal") Paint.Align.CENTER else Paint.Align.LEFT
                                     typeface = ResourcesCompat.getFont(
                                         App.context,
-                                        R.font.googlesansregular
+                                        R.font.emblematrix
                                     )
                                 }
                                 val drawStartWidth =
@@ -219,7 +229,7 @@ class MainActivity : ComponentActivity() {
                                         if (ConfigDao.watermarkType == "normal") Paint.Align.CENTER else Paint.Align.LEFT
                                     typeface = ResourcesCompat.getFont(
                                         App.context,
-                                        R.font.googlesansregular
+                                        R.font.emblematrix
                                     )
                                 }
                                 val drawStartWidth =
@@ -414,7 +424,10 @@ class MainActivity : ComponentActivity() {
                             ConfigChip("Model", "showModel", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
-                            ConfigChip("F Number", "showFNumber", true) {
+                            ConfigChip("Lens", "showLens", false) {
+                                bitmap = bitmap.copy(bitmap.config, false)
+                            }
+                            ConfigChip("Aperture", "showFNumber", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
                             ConfigChip("Shutter Speed", "showShutterSpeed", true) {

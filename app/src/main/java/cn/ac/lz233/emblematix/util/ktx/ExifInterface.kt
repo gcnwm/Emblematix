@@ -12,10 +12,22 @@ import kotlin.math.pow
 
 fun ExifInterface.getManufacturer() = getAttribute(ExifInterface.TAG_MAKE)
 
-fun ExifInterface.getModel() = getAttribute(ExifInterface.TAG_MODEL)
+fun ExifInterface.getModel(): String? {
+    var model = getAttribute(ExifInterface.TAG_MODEL)
+    if (model != null) {
+        if (model.contains("NIKON")) {
+            model = model.replace("_2", "Ⅱ")
+            model = model.replace("_3", "Ⅲ")
+        }
+    }
+    return model
+}
+fun ExifInterface.getLensModel() = getAttribute(ExifInterface.TAG_LENS_MODEL)
+
 fun ExifInterface.getDevice() = StringBuilder().apply {
     if (ConfigDao.showManufacturer && getManufacturer() != null) append("${getManufacturer()} ")
     if (ConfigDao.showModel && getModel() != null) append("${getModel()}")
+    if (ConfigDao.showLens && getLensModel() != null) append(" | ${getLensModel()}")
 }.toString().trim()
 
 fun ExifInterface.getFNumber() = getAttribute(ExifInterface.TAG_F_NUMBER)
@@ -44,7 +56,7 @@ fun ExifInterface.getFocalLength() = getAttribute(ExifInterface.TAG_FOCAL_LENGTH
 fun ExifInterface.getISO() = getAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY)
 
 fun ExifInterface.getPhotoInfo() = StringBuilder().apply {
-    if (ConfigDao.showFNumber && getFNumber() != null) append("f/${getFNumber()} • ")
+    if (ConfigDao.showFNumber && getFNumber() != null) append("ƒ/${getFNumber()} • ")
     if (ConfigDao.showShutterSpeed && getShutterSpeed() != null) append("${getShutterSpeed()} • ")
     if (ConfigDao.showFocalLength && getFocalLength() != null) append("${getFocalLength()}mm • ")
     if (ConfigDao.showISO && getISO() != null) append("ISO${getISO()}")
