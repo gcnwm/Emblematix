@@ -25,9 +25,10 @@ fun ExifInterface.getModel(): String? {
 fun ExifInterface.getLensModel() = getAttribute(ExifInterface.TAG_LENS_MODEL)
 
 fun ExifInterface.getDevice() = StringBuilder().apply {
-    if (ConfigDao.showManufacturer && getManufacturer() != null) append("${getManufacturer()} ")
+//    if (ConfigDao.showManufacturer && getManufacturer() != null) append("${getManufacturer()} ")
     if (ConfigDao.showModel && getModel() != null) append("${getModel()}")
-    if (ConfigDao.showLens && getLensModel() != null) append(" | ${getLensModel()}")
+    if (ConfigDao.showModel && ConfigDao.showLens && getModel() != null && getLensModel() != null) append(" | ")
+    if (ConfigDao.showLens && getLensModel() != null) append("${getLensModel()}")
 }.toString().trim()
 
 fun ExifInterface.getFNumber() = getAttribute(ExifInterface.TAG_F_NUMBER)
@@ -56,10 +57,16 @@ fun ExifInterface.getFocalLength() = getAttribute(ExifInterface.TAG_FOCAL_LENGTH
 fun ExifInterface.getISO() = getAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY)
 
 fun ExifInterface.getPhotoInfo() = StringBuilder().apply {
-    if (ConfigDao.showFNumber && getFNumber() != null) append("ƒ/${getFNumber()} • ")
-    if (ConfigDao.showShutterSpeed && getShutterSpeed() != null) append("${getShutterSpeed()} • ")
-    if (ConfigDao.showFocalLength && getFocalLength() != null) append("${getFocalLength()}mm • ")
-    if (ConfigDao.showISO && getISO() != null) append("ISO${getISO()}")
+//    if (ConfigDao.showFNumber && getFNumber() != null) append("ƒ/${getFNumber()} • ")
+//    if (ConfigDao.showShutterSpeed && getShutterSpeed() != null) append("${getShutterSpeed()} • ")
+//    if (ConfigDao.showFocalLength && getFocalLength() != null) append("${getFocalLength()}mm • ")
+//    if (ConfigDao.showISO && getISO() != null) append("ISO${getISO()}")
+    if (ConfigDao.showPhotoInfo) {
+        if (getFNumber() != null) append("ƒ/${getFNumber()} • ")
+        if (getShutterSpeed() != null) append("${getShutterSpeed()} • ")
+        if (getFocalLength() != null) append("${getFocalLength()}mm • ")
+        if (getISO() != null) append("ISO${getISO()}")
+    }
     if (endsWith(" • ")) delete(length - 3, length - 1)
 }.toString()
 
@@ -74,15 +81,16 @@ fun ExifInterface.getAuthor() = if (ConfigDao.copyright != "") {
 @SuppressLint("RestrictedApi")
 fun ExifInterface.getCopyRight() = StringBuilder().apply {
     val dateTime = dateTimeOriginal?.let {
-        SimpleDateFormat("yyyy|MM/dd HH:mm:ss", Locale.getDefault()).format(Date(it))
+        SimpleDateFormat("yyyy|MM/dd |HH:mm:ss", Locale.getDefault()).format(Date(it))
     }?.split('|')
     val author = getAuthor()
-    if (ConfigDao.showDateTime && dateTime != null) append("${dateTime[1]}  ")
+    if (ConfigDao.showDate && dateTime != null) append("${dateTime[1]}  ")
+    if (ConfigDao.showTime && dateTime != null) append("${dateTime[2]}  ")
     if (ConfigDao.showCopyright) {
         if (author != "") {
             append("Image © ")
             if (dateTime != null) append("${dateTime[0]} ")
-            append("${author}.")
+//            append("${author}.")
         }
     }
 }.toString().trim()

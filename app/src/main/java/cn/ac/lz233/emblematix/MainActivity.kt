@@ -120,22 +120,30 @@ class MainActivity : ComponentActivity() {
                         if (bitmap.width != 1 && bitmap.height != 1) {
                             isProcessing = true
                             val drawText = if (ConfigDao.watermarkType == "normal") {
-                                if (ConfigDao.showLens) {
+                                if (ConfigDao.showPhotoInfo) {
                                     listOf(
                                         exif.getDevice(),
-                                        "${exif.getPhotoInfo()}  ${ConfigDao.location}  ${exif.getCopyRight()}".trim()
+                                        exif.getPhotoInfo(),
+                                        "${ConfigDao.location}  ${exif.getCopyRight()}".trim()
                                     )
                                 } else {
                                     listOf(
-                                        "${exif.getDevice()}  ${exif.getPhotoInfo()}".trim(),
+                                        exif.getDevice(),
                                         "${ConfigDao.location}  ${exif.getCopyRight()}".trim()
                                     )
                                 }
                             } else {
-                                listOf(
-                                    ConfigDao.location,
-                                    "${exif.getDevice()}  ${exif.getPhotoInfo()}  ${exif.getCopyRight()}".trim()
-                                )
+                                if (ConfigDao.showPhotoInfo) {
+                                    listOf(
+                                        "${ConfigDao.location} ${exif.getCopyRight()}".trim(),
+                                        "${exif.getDevice()}  ${exif.getPhotoInfo()}".trim(),
+                                    )
+                                } else {
+                                    listOf(
+                                        exif.getDevice(),
+                                        "${ConfigDao.location} ${exif.getCopyRight()}".trim(),
+                                    )
+                                }
                             }
                             if (ConfigDao.randomization == "randomize") {
                                 val watermark = Bitmap.createBitmap(
@@ -418,28 +426,34 @@ class MainActivity : ComponentActivity() {
                                 .horizontalScroll(rememberScrollState())
                         ) {
                             Spacer(modifier = Modifier.width(20.dp))
-                            ConfigChip("Manufacturer", "showManufacturer", true) {
-                                bitmap = bitmap.copy(bitmap.config, false)
-                            }
+//                            ConfigChip("Manufacturer", "showManufacturer", true) {
+//                                bitmap = bitmap.copy(bitmap.config, false)
+//                            }
                             ConfigChip("Model", "showModel", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
                             ConfigChip("Lens", "showLens", false) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
-                            ConfigChip("Aperture", "showFNumber", true) {
+//                            ConfigChip("Aperture", "showFNumber", true) {
+//                                bitmap = bitmap.copy(bitmap.config, false)
+//                            }
+//                            ConfigChip("Shutter Speed", "showShutterSpeed", true) {
+//                                bitmap = bitmap.copy(bitmap.config, false)
+//                            }
+//                            ConfigChip("Focal Length", "showFocalLength", true) {
+//                                bitmap = bitmap.copy(bitmap.config, false)
+//                            }
+//                            ConfigChip("ISO", "showISO", true) {
+//                                bitmap = bitmap.copy(bitmap.config, false)
+//                            }
+                            ConfigChip("Photo Info", "showPhotoInfo", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
-                            ConfigChip("Shutter Speed", "showShutterSpeed", true) {
+                            ConfigChip("Date", "showDate", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
-                            ConfigChip("Focal Length", "showFocalLength", true) {
-                                bitmap = bitmap.copy(bitmap.config, false)
-                            }
-                            ConfigChip("ISO", "showISO", true) {
-                                bitmap = bitmap.copy(bitmap.config, false)
-                            }
-                            ConfigChip("Date & Time", "showDateTime", true) {
+                            ConfigChip("Time", "showTime", true) {
                                 bitmap = bitmap.copy(bitmap.config, false)
                             }
                             ConfigChip("Copyright", "showCopyright", true) {

@@ -11,9 +11,9 @@ object ConfigDao {
         get() = App.sp.getString("location", "")!!
         set(value) = App.editor.putString("location", value).apply()
 
-    var showManufacturer: Boolean
-        get() = App.sp.getBoolean("showManufacturer", true)
-        set(value) = App.editor.putBoolean("showManufacturer", value).apply()
+//    var showManufacturer: Boolean
+//        get() = App.sp.getBoolean("showManufacturer", true)
+//        set(value) = App.editor.putBoolean("showManufacturer", value).apply()
 
     var showModel: Boolean
         get() = App.sp.getBoolean("showModel", true)
@@ -23,6 +23,7 @@ object ConfigDao {
         get() = App.sp.getBoolean("showLens", true)
         set(value) = App.editor.putBoolean("showLens", value).apply()
 
+    /**
     var showFNumber: Boolean
         get() = App.sp.getBoolean("showFNumber", true)
         set(value) = App.editor.putBoolean("showFNumber", value).apply()
@@ -38,10 +39,18 @@ object ConfigDao {
     var showISO: Boolean
         get() = App.sp.getBoolean("showISO", true)
         set(value) = App.editor.putBoolean("showISO", value).apply()
+**/
+    var showPhotoInfo: Boolean
+        get() = App.sp.getBoolean("showPhotoInfo", true)
+        set(value) = App.editor.putBoolean("showPhotoInfo", value).apply()
 
-    var showDateTime: Boolean
-        get() = App.sp.getBoolean("showDateTime", true)
-        set(value) = App.editor.putBoolean("showDateTime", value).apply()
+    var showDate: Boolean
+        get() = App.sp.getBoolean("showDate", true)
+        set(value) = App.editor.putBoolean("showDate", value).apply()
+
+    var showTime: Boolean
+        get() = App.sp.getBoolean("showTime", true)
+        set(value) = App.editor.putBoolean("showTime", value).apply()
 
     var showCopyright: Boolean
         get() = App.sp.getBoolean("showCopyright", true)
